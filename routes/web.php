@@ -17,11 +17,7 @@ use Illuminate\Http\Request;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/home', function () {
-    return view('home');
+    return view('app');
 });
 
 $movies = [];
@@ -35,14 +31,22 @@ Route::group(
     function () use ($movies) {
         /**
          * Routing for get all data
+         * Route('movie.index)
          */
-        Route::get('/', [MovieController::class, 'index']);
+        Route::get('/', [MovieController::class, 'index'])->name('index');
+
+        /**
+         * Routing for form insert data
+         * Makeure for create its above in route show
+         * cause if in bottom show this route will be override show
+         */
+        Route::get('/create', [MovieController::class, 'create'])->name('create');
 
         /**
          * Routing for get data from filter
          */
         // Route::get('/{id}', [MovieController::class, 'show'])->middleware(['isMember']);
-        Route::get('/{id}', [MovieController::class, 'show']);
+        Route::get('/{id}', [MovieController::class, 'show'])->name('show');
 
         /**
          * Routing for insert data
@@ -85,32 +89,3 @@ Route::get('/pricing', function () {
 Route::get('/login', function () {
     return 'Login Page';
 })->name('login');
-
-
-
-Route::middleware('cache.headers:public;max_age=2628000;etag')->group(function () {
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
-
-    Route::get('/dashboard', function () {
-        $user = 'admin';
-
-        return response('Login successfully', 200)->cookie($user);
-    });
-
-    Route::get('/logout', function () {
-        return redirect()->action([HomeController::class, 'index'], ['authenticated' => false]);
-    });
-
-    Route::get('/privacy', function () {
-        return 'Privacy page';
-    });
-
-    Route::get('/terms', function () {
-        return 'Term';
-    });
-});
-
-
-Route::get('/external', function () {
-    return redirect('/');
-});

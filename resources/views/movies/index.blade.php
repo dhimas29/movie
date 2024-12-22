@@ -1,48 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
+@section('content')
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+        @forelse ($movies as $movie)
+            <a href="{{ route('movie.show', $loop->index) }}">
+                <div class="bg-gray-800 p-4 rounded-lg relative group">
+                    <img src="{{ $movie['image'] }}" alt="{{ $movie['title'] }}"
+                        class="w-full h-[300px] object-cover rounded-md">
+                    <h3 class="text-lg mt-2">{{ $movie['title'] }}</h3>
+                    <p class="text-sm text-gray-400">{{ $movie['release_date'] }}</p>
+                    <div class="absolute top-2 right-2 space-x-2 opacity-0 group-hover:opacity-100 transition">
+                        <button class="bg-green-600 p-1 rounded hover:bg-green-500">
+                            ✏️
+                        </button>
+                        <button class="bg-green-600 p-1 rounded hover:bg-red-500">
+                            🗑️
+                        </button>
+                    </div>
+                </div>
+            </a>
+        @empty
+            <div>
+                <div class="bg-gray-800 p-4 rounded-lg relative group">
+                    KOSONG
+                </div>
+            </div>
+        @endforelse
 
-<body>
-    <?php foreach ($menu as $key => $value) : ?>
-    <li><a href="{{ $value }}">{{ $key }}</a></li>
-    <?php endforeach; ?>
-
-    <h1>{{ $titlePage }}</h1>
-
-    <table border="1">
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Title</th>
-                <th>Year</th>
-                <th>Genre</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($movies as $key => $movie)
-                <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $movie['title'] }}</td>
-                    <td>{{ $movie['year'] }}</td>
-                    <td>{{ $movie['genre'] }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-
-    <ul>
-        @foreach ($config as $key => $value)
-            <li>{{ $key }}: {{ $value }}</li>
-        @endforeach
-    </ul>
-
-
-</body>
-
-</html>
+    </div>
+@endsection
